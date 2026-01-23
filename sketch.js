@@ -1,4 +1,3 @@
-let mode = "auto";
 let branches = [];
 
 function setup() {
@@ -13,7 +12,7 @@ function setup() {
             level: 0,
             speed: 10,
             angleCoeff: 5,
-            lengthCoeff: 2.5,
+            lengthCoeff: 2.4,
         }),
     );
 }
@@ -21,28 +20,13 @@ function setup() {
 function draw() {
     background(0);
 
-    if (mode === "manual") {
-        noLoop();
-    }
-
     branches.forEach((branch) => {
         branch.update();
         branch.show();
     });
 
-    if (branches.at(-1).level > 6) {
+    if (branches.at(-1).level > 7) {
         noLoop();
         return;
     }
-}
-
-function stepPlusOne() {
-    mode = "manual";
-    loop();
-}
-
-function stepRun() {
-    mode = "auto";
-    frameRate(60);
-    loop();
 }

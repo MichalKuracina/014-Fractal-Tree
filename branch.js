@@ -36,7 +36,7 @@ class Branch {
                 this.lengthCoeff = this.lengthCoeff - 0.2;
                 this.angleCoeff = random(
                     this.angleCoeff - 0.5,
-                    this.angleCoeff + 0.1,
+                    this.angleCoeff + 0.5,
                 );
 
                 branches.push(
