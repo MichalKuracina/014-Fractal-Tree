@@ -10,15 +10,14 @@ class Branch {
         this.speed = parameters.speed;
         this.angleCoeff = parameters.angleCoeff;
         this.lengthCoeff = parameters.lengthCoeff;
+        this.thickness = parameters.thickness;
+        this.color = parameters.color;
         this.currentLength = 0;
         this.finished = false;
+        this.isLast = true;
     }
 
     update() {
-        // if (this.currentLength < this.length) {
-        //     this.currentLength += 2;
-        // }
-
         this.xEnd = this.xStart + this.currentLength * cos(this.angle);
         this.yEnd = this.yStart - this.currentLength * sin(this.angle);
 
@@ -33,46 +32,47 @@ class Branch {
                 this.xEnd = this.xStart + this.currentLength * cos(this.angle);
                 this.yEnd = this.yStart - this.currentLength * sin(this.angle);
 
-                this.lengthCoeff = this.lengthCoeff - 0.2;
-                this.angleCoeff = random(
-                    this.angleCoeff - 0.5,
-                    this.angleCoeff + 0.5,
-                );
+                this.lengthCoeff = this.lengthCoeff - random(0.01, 0.02);
+                this.angleCoeff = this.angleCoeff - random(-0.5, 0.5);
 
-                branches.push(
-                    new Branch({
-                        x: this.xEnd,
-                        y: this.yEnd,
-                        length: this.length / this.lengthCoeff,
-                        angle: this.angle - PI / this.angleCoeff,
-                        level: this.level,
-                        speed: this.speed,
-                        angleCoeff: this.angleCoeff,
-                        lengthCoeff: this.lengthCoeff,
-                    }),
-                );
-                branches.push(
-                    new Branch({
-                        x: this.xEnd,
-                        y: this.yEnd,
-                        length: this.length / this.lengthCoeff,
-                        angle: this.angle + PI / this.angleCoeff,
-                        level: this.level,
-                        speed: this.speed,
-                        angleCoeff: this.angleCoeff,
-                        lengthCoeff: this.lengthCoeff,
-                    }),
-                );
+                if (branches.at(-1).level < branchLimit) {
+                    this.isLast = false;
+                    branches.push(
+                        new Branch({
+                            x: this.xEnd,
+                            y: this.yEnd,
+                            length: this.length * this.lengthCoeff,
+                            angle: this.angle - PI / this.angleCoeff,
+                            level: this.level,
+                            speed: random(this.speed - 2, this.speed + 2),
+                            angleCoeff: this.angleCoeff,
+                            lengthCoeff: this.lengthCoeff,
+                            thickness: this.thickness - 3,
+                            color: this.color,
+                        }),
+                    );
+                    branches.push(
+                        new Branch({
+                            x: this.xEnd,
+                            y: this.yEnd,
+                            length: this.length * this.lengthCoeff,
+                            angle: this.angle + PI / this.angleCoeff,
+                            level: this.level,
+                            speed: random(this.speed - 2, this.speed + 2),
+                            angleCoeff: this.angleCoeff,
+                            lengthCoeff: this.lengthCoeff,
+                            thickness: this.thickness - 3,
+                            color: this.color,
+                        }),
+                    );
+                }
             }
         }
-
-        // if (this.currentLength < 50) {
-        //     this.finished = true;
-        // }
     }
 
     show() {
-        stroke(255);
+        stroke(this.color);
+        strokeWeight(this.thickness);
         line(this.xStart, this.yStart, this.xEnd, this.yEnd);
     }
 }
